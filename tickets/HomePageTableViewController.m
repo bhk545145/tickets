@@ -6,11 +6,12 @@
 //  Copyright © 2017年 白洪坤. All rights reserved.
 //
 
-#define baseUrl @"http://f.apiplus.cn"
+
 
 #import "HomePageTableViewController.h"
 #import "AFNetworking.h"
 #import "ticketsinfo.h"
+#import "bhkCommon.h"
 
 @interface HomePageTableViewController ()
 @property (nonatomic,strong)NSMutableArray *devicearray;
@@ -21,10 +22,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     _devicearray = [[NSMutableArray alloc]init];
-    NSArray *array = @[@{@"name":@"双色球",@"code":@"ssq",@"png":@"58.png"},
-                       @{@"name":@"超级大乐透",@"code":@"dlt",@"png":@"58.png"},
-                       @{@"name":@"福彩3D",@"code":@"fc3d",@"png":@"58.png"},
-                       @{@"name":@"湖北快3",@"code":@"hubk3",@"png":@"58.png"}];
+    NSArray *array = ticketsarray;
     [_devicearray addObjectsFromArray:array];
 }
 
@@ -77,6 +75,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
 }
+
 //获取彩票开奖数据
 - (void)apiplus:(NSString *)URLString completionHandler:(void (^)(NSDictionary *))completionHandler{
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];

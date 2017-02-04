@@ -19,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		02AA7A831E45C2AB006E3C31 /* bhkCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bhkCommon.h; sourceTree = "<group>"; };
 		02CDF8A91E44241300216C3E /* tickets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tickets.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02CDF8AD1E44241300216C3E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		02CDF8AF1E44241300216C3E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -50,6 +51,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		02AA7A7F1E45C223006E3C31 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				02CDF8C61E4424D100216C3E /* HomePageTableViewController.h */,
+				02CDF8C71E4424D100216C3E /* HomePageTableViewController.m */,
+				02CDF8C91E4424D900216C3E /* PLFiveViewController.h */,
+				02CDF8CA1E4424D900216C3E /* PLFiveViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		02AA7A801E45C22E006E3C31 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				02CDF8B81E44241300216C3E /* Main.storyboard */,
+				02CDF8BD1E44241300216C3E /* LaunchScreen.storyboard */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		02AA7A811E45C262006E3C31 /* tool */ = {
+			isa = PBXGroup;
+			children = (
+				02AA7A831E45C2AB006E3C31 /* bhkCommon.h */,
+			);
+			name = tool;
+			sourceTree = "<group>";
+		};
 		02CDF8A01E44241300216C3E = {
 			isa = PBXGroup;
 			children = (
@@ -71,16 +100,13 @@
 		02CDF8AB1E44241300216C3E /* tickets */ = {
 			isa = PBXGroup;
 			children = (
+				02AA7A7F1E45C223006E3C31 /* Controller */,
+				02AA7A801E45C22E006E3C31 /* View */,
 				02FB42F41E447B1900B043E5 /* model */,
+				02AA7A811E45C262006E3C31 /* tool */,
 				02CDF8AF1E44241300216C3E /* AppDelegate.h */,
 				02CDF8B01E44241300216C3E /* AppDelegate.m */,
-				02CDF8C61E4424D100216C3E /* HomePageTableViewController.h */,
-				02CDF8C71E4424D100216C3E /* HomePageTableViewController.m */,
-				02CDF8C91E4424D900216C3E /* PLFiveViewController.h */,
-				02CDF8CA1E4424D900216C3E /* PLFiveViewController.m */,
-				02CDF8B81E44241300216C3E /* Main.storyboard */,
 				02CDF8BB1E44241300216C3E /* Assets.xcassets */,
-				02CDF8BD1E44241300216C3E /* LaunchScreen.storyboard */,
 				02CDF8C01E44241300216C3E /* Info.plist */,
 				02CDF8AC1E44241300216C3E /* Supporting Files */,
 			);
@@ -369,6 +395,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 5YQ85Q9UV8;
 				INFOPLIST_FILE = tickets/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.com.broadlink.tickets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -382,6 +409,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 5YQ85Q9UV8;
 				INFOPLIST_FILE = tickets/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.com.broadlink.tickets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
