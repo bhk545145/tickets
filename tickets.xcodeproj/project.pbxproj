@@ -14,6 +14,7 @@
 		02CDF8BF1E44241300216C3E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 02CDF8BD1E44241300216C3E /* LaunchScreen.storyboard */; };
 		02CDF8C81E4424D100216C3E /* HomePageTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CDF8C71E4424D100216C3E /* HomePageTableViewController.m */; };
 		02CDF8CB1E4424D900216C3E /* PLFiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CDF8CA1E4424D900216C3E /* PLFiveViewController.m */; };
+		02E6FD4B1E4818CF0002A35C /* kaijiangModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 02E6FD4A1E4818CF0002A35C /* kaijiangModel.m */; };
 		02FB42F71E44909000B043E5 /* ticketsinfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 02FB42F61E44909000B043E5 /* ticketsinfo.m */; };
 		BB93F951777EE9AFF2976DE0 /* Pods_tickets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CAE1AB8C5CC5BB8F91EA2249 /* Pods_tickets.framework */; };
 /* End PBXBuildFile section */
@@ -32,6 +33,8 @@
 		02CDF8C71E4424D100216C3E /* HomePageTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomePageTableViewController.m; sourceTree = "<group>"; };
 		02CDF8C91E4424D900216C3E /* PLFiveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLFiveViewController.h; sourceTree = "<group>"; };
 		02CDF8CA1E4424D900216C3E /* PLFiveViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLFiveViewController.m; sourceTree = "<group>"; };
+		02E6FD491E4818CF0002A35C /* kaijiangModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kaijiangModel.h; sourceTree = "<group>"; };
+		02E6FD4A1E4818CF0002A35C /* kaijiangModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = kaijiangModel.m; sourceTree = "<group>"; };
 		02FB42F51E44909000B043E5 /* ticketsinfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ticketsinfo.h; sourceTree = "<group>"; };
 		02FB42F61E44909000B043E5 /* ticketsinfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ticketsinfo.m; sourceTree = "<group>"; };
 		3248795BF0E7275919C58D77 /* Pods-tickets.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tickets.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tickets/Pods-tickets.debug.xcconfig"; sourceTree = "<group>"; };
@@ -126,6 +129,8 @@
 			children = (
 				02FB42F51E44909000B043E5 /* ticketsinfo.h */,
 				02FB42F61E44909000B043E5 /* ticketsinfo.m */,
+				02E6FD491E4818CF0002A35C /* kaijiangModel.h */,
+				02E6FD4A1E4818CF0002A35C /* kaijiangModel.m */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -273,6 +278,7 @@
 				02CDF8C81E4424D100216C3E /* HomePageTableViewController.m in Sources */,
 				02CDF8B11E44241300216C3E /* AppDelegate.m in Sources */,
 				02CDF8CB1E4424D900216C3E /* PLFiveViewController.m in Sources */,
+				02E6FD4B1E4818CF0002A35C /* kaijiangModel.m in Sources */,
 				02FB42F71E44909000B043E5 /* ticketsinfo.m in Sources */,
 				02CDF8AE1E44241300216C3E /* main.m in Sources */,
 			);

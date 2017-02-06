@@ -10,4 +10,6 @@
 
 @interface PLFiveViewController : UIViewController
 
+- (IBAction)pressedLotteryButton:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *arrorimagebtn;
 @end

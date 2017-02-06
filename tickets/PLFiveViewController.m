@@ -7,31 +7,90 @@
 //
 
 #import "PLFiveViewController.h"
+#import "kaijiangModel.h"
 
-@interface PLFiveViewController ()
+@interface PLFiveViewController (){
+    NSMutableArray      *_kaijiangArray;        //前5期开奖信息保存在此数组中
+    BOOL                _open_lotteryView;      //是否打开中奖详情
+}
 
 @end
 
 @implementation PLFiveViewController
 
+#pragma mark --  读取开奖数据
+- (void)readKaiJiangData
+{
+    _kaijiangArray = [[NSMutableArray alloc] initWithCapacity:0];
+    kaijiangModel *kaijiangQiHao = [[kaijiangModel alloc]init];
+    kaijiangQiHao.lotteryNum = @"073";
+    kaijiangQiHao.lotteryDay = @"556";
+    [_kaijiangArray addObject:kaijiangQiHao];
+}
+
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    //读取中奖信息
+    [self readKaiJiangData];
+    _open_lotteryView = NO;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+
+
+- (IBAction)pressedLotteryButton:(id)sender {
+    if (!_open_lotteryView) {
+        [_arrorimagebtn setImage:[UIImage imageNamed:@"redUpArrow.png"] forState:UIControlStateNormal];
+        //下移动画
+        
+        _open_lotteryView = YES;
+    }else{
+        [_arrorimagebtn setImage:[UIImage imageNamed:@"RedDownArrow.png"] forState:UIControlStateNormal];
+        //上拉动画
+        
+        _open_lotteryView = NO;
+    }
 }
 
-/*
-#pragma mark - Navigation
+#pragma mark -- tableViewDelegate
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if (tableView.tag == 2) {
+        return 6;
+    }
+    else if(tableView.tag == 3)
+    {
+        return 5;
+    }
+    return 0;
 }
-*/
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (tableView.tag == 3) {
+        return 24;
+    }else
+    {
+        if (indexPath.row == 0) {
+            return 25;
+        }
+        else
+        {
+            return 90;
+        }
+    }
+}
+
+- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *CellIdentifier = @"Devicecell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    }
+    return cell;
+}
 
 @end
