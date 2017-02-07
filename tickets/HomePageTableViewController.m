@@ -12,6 +12,7 @@
 #import "AFNetworking.h"
 #import "ticketsinfo.h"
 #import "bhkCommon.h"
+#import "PLFiveViewController.h"
 
 @interface HomePageTableViewController ()
 @property (nonatomic,strong)NSMutableArray *devicearray;
@@ -74,6 +75,18 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
+    [self performSegueWithIdentifier:@"DocumentDetailView" sender:_devicearray[indexPath.row][@"name"]];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"DocumentDetailView"]) {
+        UIViewController *target = segue.destinationViewController;
+        if ([target isKindOfClass:[PLFiveViewController class]]) {
+            PLFiveViewController* deviceVC = (PLFiveViewController *)target;
+            deviceVC.name = @"asdasd";
+        }
+    }
 }
 
 //获取彩票开奖数据

@@ -35,8 +35,8 @@
     //读取中奖信息
     [self readKaiJiangData];
     _open_lotteryView = NO;
+    self.navigationItem.title = self.name;
 }
-
 
 
 - (IBAction)pressedLotteryButton:(id)sender {
@@ -85,11 +85,14 @@
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *CellIdentifier = @"Devicecell";
+    NSString *CellIdentifier = @"kaijiangcell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
+    UILabel *kaijianglab = (UILabel *)[cell viewWithTag:101];
+    kaijiangModel *kaijiangQiHao = [_kaijiangArray objectAtIndex:0];
+    kaijianglab.text = [NSString stringWithFormat:@"%@期%@",kaijiangQiHao.lotteryNum,kaijiangQiHao.lotteryDay];
     return cell;
 }
 

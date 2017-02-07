@@ -12,4 +12,5 @@
 
 - (IBAction)pressedLotteryButton:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *arrorimagebtn;
+@property (nonatomic,strong) NSString *name;
 @end
