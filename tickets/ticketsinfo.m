@@ -19,13 +19,5 @@
     return self;
 }
 
-- (id)initWithdata:(NSArray *)data rows:(int)rows{
-    if (self = [super init]) {
-        rows = rows - 1;
-        _expect = _data[rows][@"expect"];
-        _opencode = _data[rows][@"opencode"];
-        _opentime = _data[rows][@"opentime"];
-    }
-    return self;
-}
+
 @end

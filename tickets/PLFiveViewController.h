@@ -13,4 +13,7 @@
 - (IBAction)pressedLotteryButton:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *arrorimagebtn;
 @property (nonatomic,strong) NSString *name;
+@property (nonatomic,strong) NSString *code;
+@property (weak, nonatomic) IBOutlet UITableView *ticketsTableview;
+@property (weak, nonatomic) IBOutlet UIView *openLotteryView;
 @end

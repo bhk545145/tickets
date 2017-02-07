@@ -9,10 +9,11 @@
 
 
 #import "HomePageTableViewController.h"
-#import "AFNetworking.h"
 #import "ticketsinfo.h"
 #import "bhkCommon.h"
 #import "PLFiveViewController.h"
+#import "kaijiangGet.h"
+#import "datainfo.h"
 
 @interface HomePageTableViewController ()
 @property (nonatomic,strong)NSMutableArray *devicearray;
@@ -56,27 +57,28 @@
     ticketsimgeview.image = [UIImage imageNamed:ticketsimageString];
     NSString *string = [NSString stringWithFormat:@"/%@-1.json",_devicearray[indexPath.row][@"code"]];
     NSString *URLString = [baseUrl stringByAppendingString:string];
-    [self apiplus:URLString completionHandler:^(NSDictionary *dic) {
+    kaijiangGet *kaijiangget = [[kaijiangGet alloc]init];
+    [kaijiangget apiplus:URLString completionHandler:^(NSDictionary *dic) {
         ticketsinfo *info = [[ticketsinfo alloc]init];
         info = [info initWithDict:dic];
+        datainfo *Datainfo = [[datainfo alloc]init];
         for (int i = 0;i < info.rows;i++) {
-            info = [info initWithdata:info.data rows:info.rows];
+            Datainfo = [Datainfo initWithdata:info.data rows:i];
         }
         UILabel *opencodeLabel = (UILabel *)[cell viewWithTag:102];
-        opencodeLabel.text = [NSString stringWithFormat:@"%@",info.opencode];
+        opencodeLabel.text = [NSString stringWithFormat:@"%@",Datainfo.opencode];
         UILabel *expectLabel = (UILabel *)[cell viewWithTag:103];
-        expectLabel.text = [NSString stringWithFormat:@"第%@期",info.expect];
+        expectLabel.text = [NSString stringWithFormat:@"第%@期",Datainfo.expect];
         UILabel *opentimeLabel = (UILabel *)[cell viewWithTag:104];
-        opentimeLabel.text =[NSString stringWithFormat:@"开奖时间 %@",info.opentime];
+        opentimeLabel.text =[NSString stringWithFormat:@"开奖时间 %@",Datainfo.opentime];
     }];
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
 
-    [self performSegueWithIdentifier:@"DocumentDetailView" sender:_devicearray[indexPath.row][@"name"]];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -84,23 +86,14 @@
         UIViewController *target = segue.destinationViewController;
         if ([target isKindOfClass:[PLFiveViewController class]]) {
             PLFiveViewController* deviceVC = (PLFiveViewController *)target;
-            deviceVC.name = @"asdasd";
+            NSIndexPath *path = [self.tableView indexPathForSelectedRow];
+            NSString *name = _devicearray[path.row][@"name"];
+            NSString *code = _devicearray[path.row][@"code"];
+            deviceVC.name = name;
+            deviceVC.code = code;
         }
     }
 }
 
-//获取彩票开奖数据
-- (void)apiplus:(NSString *)URLString completionHandler:(void (^)(NSDictionary *))completionHandler{
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager GET:URLString parameters:nil progress:^(NSProgress * _Nonnull uploadProgress) {
-        
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-        completionHandler(dic);
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求失败:%@", error.description);
-    }];
 
-}
 @end

@@ -13,10 +13,8 @@
 @property (nonatomic, strong) NSArray *data;
 @property (nonatomic, assign) int rows;
 
-@property (nonatomic, strong) NSString *expect;
-@property (nonatomic, strong) NSString *opencode;
-@property (nonatomic, strong) NSString *opentime;
+
 
 - (id)initWithDict:(NSDictionary *)dict;
-- (id)initWithdata:(NSArray *)data rows:(int)rows;
+
 @end
