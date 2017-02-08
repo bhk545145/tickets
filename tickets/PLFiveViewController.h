@@ -16,4 +16,5 @@
 @property (nonatomic,strong) NSString *code;
 @property (weak, nonatomic) IBOutlet UITableView *ticketsTableview;
 @property (weak, nonatomic) IBOutlet UIView *openLotteryView;
+@property (weak, nonatomic) IBOutlet UITableView *PLFiveTableView;
 @end

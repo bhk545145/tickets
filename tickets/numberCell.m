@@ -9,69 +9,79 @@
 #import "numberCell.h"
 #define BALLHIGHLIGHT  123456
 
-@interface numberCell()
+@interface numberCell(){
+    UILabel *zhiXuanLabel;
+//    NSMutableArray  *_selectNumberArray;
+}
 
 @end
 
 @implementation numberCell
-
-
+-(void)setIndexint:(NSInteger)indexint{
+    _indexint = indexint;
+    switch (_indexint) {
+        case 1:
+            zhiXuanLabel.text = @"万";
+            break;
+        case 2:
+            zhiXuanLabel.text = @"千";
+            break;
+        case 3:
+            zhiXuanLabel.text = @"百";
+            break;
+        case 4:
+            zhiXuanLabel.text = @"十";
+            break;
+        case 5:
+            zhiXuanLabel.text = @"个";
+            break;
+        default:
+            break;
+    }
+}
 
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        
         _selectNumberArray = [[NSMutableArray alloc] initWithCapacity:0];
-        _zhiXuanLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 14, 39.5, 21)];
-//        _zhiXuanLabel.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BetSFCCellTeam1"]];
-//        _zhiXuanLabel.text = @"百";
-//        _zhiXuanLabel.textAlignment = NSTextAlignmentCenter;
-//        _zhiXuanLabel.textColor = [UIColor colorWithRed:141.0/255.0 green:70.0/255.0 blue:27.0/255.0 alpha:1];
-//        _zhiXuanLabel.font = [UIFont systemFontOfSize:11];
-//        [self.contentView addSubview:_zhiXuanLabel];
-
-        
-        UIImageView *linebreakImage = [[UIImageView alloc] initWithFrame:CGRectMake(5, 89, 310, 1)];
-        linebreakImage.backgroundColor = [UIColor lightGrayColor];
-        [self.contentView addSubview:linebreakImage];
-
+        zhiXuanLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 14, 39.5, 21)];
+        zhiXuanLabel.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BetSFCCellTeam1"]];
+        zhiXuanLabel.text = @"百";
+        zhiXuanLabel.textAlignment = NSTextAlignmentCenter;
+        zhiXuanLabel.textColor = [UIColor colorWithRed:141.0/255.0 green:70.0/255.0 blue:27.0/255.0 alpha:1];
+        zhiXuanLabel.font = [UIFont systemFontOfSize:11];
+        [self.contentView addSubview:zhiXuanLabel];
         //添加十个小球和小球上的数字
         for (NSInteger i = 0; i<2; i++) {
             for (NSInteger j = 0; j<5; j++) {
-            
-                _redBallImage  = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BetGrayBall.png"]];
-                _redBallImage.tag = j+i*5+100;
-                _redBallImage.frame = CGRectMake(55+(35+11)*j, 9+(39+2)*i, 35, 39);
-                _redBallImage.userInteractionEnabled = YES;
-                [self.contentView addSubview:_redBallImage];
+                UIImageView *redBallImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BetGrayBall.png"]];
+                redBallImage.tag = j+i*5+103;
+                redBallImage.frame = CGRectMake(55+(35+11)*j, 9+(39+2)*i, 35, 39);
+                redBallImage.userInteractionEnabled = YES;
+                [self.contentView addSubview:redBallImage];
                 
-                
-                UILabel *_lableNumber = [[UILabel alloc] initWithFrame:_redBallImage.bounds];
-                _lableNumber.userInteractionEnabled = YES;
-                _lableNumber.tag = (j+i*5)+110;
-                _lableNumber.backgroundColor = [UIColor clearColor];
-                _lableNumber.text = [NSString stringWithFormat:@"%ld",j+i*5];
-                _lableNumber.textColor = [UIColor colorWithRed:160.0/255.0 green:14.0/255.0 blue:54.0/255.0 alpha:1];
-                _lableNumber.textAlignment = NSTextAlignmentCenter;
-                _lableNumber.font = [UIFont systemFontOfSize:20];
-                [_redBallImage addSubview:_lableNumber];
-                
+                UILabel *labelNumber = [[UILabel alloc] initWithFrame:redBallImage.bounds];
+                labelNumber.tag = (j+i*5)+120;
+                labelNumber.text = [NSString stringWithFormat:@"%ld",j+i*5];
+                labelNumber.textColor = [UIColor colorWithRed:160.0/255.0 green:14.0/255.0 blue:54.0/255.0 alpha:1];
+                labelNumber.textAlignment = NSTextAlignmentCenter;
+                labelNumber.font = [UIFont systemFontOfSize:20];
+                labelNumber.userInteractionEnabled = YES;
+                [redBallImage addSubview:labelNumber];
             }
         }
-        
+
     }
-    self.userInteractionEnabled = YES;
     return self;
 }
-
 //把选中小球变成红色或取消选择变成白色
 
 - (void)numberImageBackground:(NSInteger)imageTag
 {
     
-    NSString *selectNumberStr = [NSString stringWithFormat:@"%d",imageTag - 100];
+    NSString *selectNumberStr = [NSString stringWithFormat:@"%ld",imageTag - 103];
     if ([_selectNumberArray count] == 0) {
         [_selectNumberArray addObject:selectNumberStr];
         UIImageView *tmpImage = (UIImageView *)[self.contentView viewWithTag:imageTag];
@@ -107,6 +117,7 @@
         NSLog(@"数组：%@",_selectNumberArray);
         [self.delegate getTotalNotsAndMoney];
         //增加一注
+        
     }
     
 }
@@ -201,7 +212,7 @@
     //删除所有的redballHighlight
     [self removeBallHighlight];
     
-    for (NSInteger i = 100 ; i<110; i++) {
+    for (NSInteger i = 103 ; i<113; i++) {
         UIImageView *tmpImage = (UIImageView *)[self.contentView viewWithTag:i];
         CGRect tmpRect = tmpImage.frame;
         if (CGRectContainsPoint(tmpRect, location)) {
@@ -231,7 +242,7 @@
     UILabel *_lableNumberBackground = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
     _lableNumberBackground.tag = 12345;
     _lableNumberBackground.backgroundColor = [UIColor clearColor];
-    _lableNumberBackground.text = [NSString stringWithFormat:@"%d",SeleteNumber];
+    _lableNumberBackground.text = [NSString stringWithFormat:@"%ld",(long)SeleteNumber];
     _lableNumberBackground.textColor = [UIColor whiteColor];
     _lableNumberBackground.textAlignment = NSTextAlignmentCenter;
     _lableNumberBackground.font = [UIFont boldSystemFontOfSize:25];

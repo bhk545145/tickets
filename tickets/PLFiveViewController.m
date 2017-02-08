@@ -12,16 +12,16 @@
 #import "ticketsinfo.h"
 #import "datainfo.h"
 #import "numberCell.h"
-#import "shakedViewCell.h"
 
-@interface PLFiveViewController ()<UITableViewDelegate,UITableViewDataSource>{
+@interface PLFiveViewController ()<numberCellDelegate>{
     NSMutableArray      *_kaijiangArray;        //前5期开奖信息保存在此数组中
     BOOL                _open_lotteryView;      //是否打开中奖详情
     int                 _rows;
-    UITableView         *_PLFiveTableView;      //直选tableview
     BOOL                _refreshData;           //是否刷新数据
     NSMutableArray      *_shakeNumber;          //摇一摇机选数
     NSMutableArray      *_makeSureSelectNumArray;//确定选好的号码
+    UILabel             *_numberNots;           //共几注
+    UILabel             *_totalMoney;           //共多少钱
 }
 
 @end
@@ -58,7 +58,6 @@
     [self readKaiJiangData];
     _open_lotteryView = NO;
     self.navigationItem.title = self.name;
-    [self addTableview];
 }
 
 
@@ -68,7 +67,7 @@
         //下移动画
         [UIView beginAnimations:nil context:NULL];
         _openLotteryView.frame = CGRectMake(0, 65, 375, 120);
-        _PLFiveTableView.frame = CGRectMake(0, 80+100, 375, 434);;
+        _PLFiveTableView.frame = CGRectMake(0, 80+100, 375, 529);;
         [UIView commitAnimations];
         _open_lotteryView = YES;
     }else{
@@ -77,43 +76,12 @@
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:0.3];
         _openLotteryView.frame = CGRectMake(0, -35, 375, 120);
-        _PLFiveTableView.frame = CGRectMake(0, 80, 375, 434);
+        _PLFiveTableView.frame = CGRectMake(0, 80, 375, 529);
         _open_lotteryView = NO;
     }
 }
 
-#pragma mark -- 添加选号cell
 
-- (void)addTableview
-{
-    CGRect rect ;
-    rect = CGRectMake(0, 80, 375, 433);
-    _PLFiveTableView = [[UITableView alloc] initWithFrame:rect style:UITableViewStylePlain];
-    _PLFiveTableView.tag = 2;
-    _PLFiveTableView.alpha = 1;
-    // _PLFiveTableView.contentSize = CGSizeMake(320, 25+90*5);
-    _PLFiveTableView.dataSource = self;
-    _PLFiveTableView.delegate = self;
-    _PLFiveTableView.userInteractionEnabled = YES;
-    _PLFiveTableView.bounces = YES;
-    _PLFiveTableView.scrollEnabled = YES;
-    _PLFiveTableView.showsHorizontalScrollIndicator = NO;
-    _PLFiveTableView.showsVerticalScrollIndicator = NO;
-    _PLFiveTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
-    
-    
-    
-    //设置背景
-    //_PLFiveTableView.backgroundColor = [UIColor clearColor];
-    UIView *bgview = [[UIView alloc] init];
-    bgview.backgroundColor = [UIColor colorWithRed:244.0/255.0 green:243.0/255.0 blue:238.0/255.0 alpha:1];
-    _PLFiveTableView.backgroundView = bgview;
-
-    [self.view addSubview:_PLFiveTableView];
-
-    
-}
 
 
 #pragma mark -- tableViewDelegate
@@ -141,7 +109,7 @@
         }
         else
         {
-            return 90;
+            return 100;
         }
     }
 }
@@ -152,9 +120,11 @@
         case (2):
         {
             if (indexPath.row == 0) {
-                NSString *CellId = @"firstCell";
-                shakedViewCell *cell = [[shakedViewCell alloc] initWithStyle:UITableViewStylePlain reuseIdentifier:CellId withTitle:@"每位至少选择一个数字"];
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                NSString *CellIdentifier = @"firstCell";
+                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                if (cell == nil) {
+                    cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+                }
                 return cell;
             }else
             {
@@ -162,27 +132,9 @@
                 numberCell* cell= [tableView dequeueReusableCellWithIdentifier:CellId];
                 if (cell == nil) {
                     cell = [[numberCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellId];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 }
-                switch (indexPath.row) {
-//                    case 1:
-//                        cell.zhiXuanLabel.text = @"万";
-//                        break;
-//                    case 2:
-//                        cell.zhiXuanLabel.text = @"千";
-//                        break;
-//                    case 3:
-//                        cell.zhiXuanLabel.text = @"百";
-//                        break;
-//                    case 4:
-//                        cell.zhiXuanLabel.text = @"十";
-//                        break;
-//                    case 5:
-//                        cell.zhiXuanLabel.text = @"个";
-//                        break;
-//                    default:
-//                        break;
-                }
+                cell.indexint = indexPath.row;
+                               
                 if (_refreshData) {
                     //清空所有cell上数据
                     [cell refreshDataWith:@"清空数据"];
@@ -228,4 +180,38 @@
     
 }
 
+#pragma mark --
+#pragma mark -- NumberCellDelegate
+//当前界面在选号时不可滑动，cell来控制
+- (void)tableViewScrll:(BOOL)stop
+{
+    if (stop) {
+        _PLFiveTableView.scrollEnabled = YES;
+        NSLog(@"*****可滚动*****");
+        
+    }else
+    {
+        _PLFiveTableView.scrollEnabled = NO;
+        NSLog(@"*****不可滚动*****");
+        
+    }
+    
+}
+
+//选中或取消号码后产生的注数和钱数
+
+- (void)getTotalNotsAndMoney
+{
+    NSInteger totalNumber = 1;
+    [_PLFiveTableView reloadData];
+    NSLog(@"数组%lu",(unsigned long)[_makeSureSelectNumArray count]);
+    for (NSInteger i = 0; i<5; i++) {
+        NSMutableArray *tmpArray = [_makeSureSelectNumArray objectAtIndex:i];
+        
+        totalNumber *= [tmpArray count];
+    }
+    _numberNots.text = [NSString stringWithFormat:@"共%ld注",(long)totalNumber];
+    _totalMoney.text = [NSString stringWithFormat:@"%ld元",totalNumber*2];
+    NSLog(@"%ld",(long)totalNumber);
+}
 @end
