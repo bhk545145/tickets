@@ -20,8 +20,10 @@
     BOOL                _refreshData;           //是否刷新数据
     NSMutableArray      *_shakeNumber;          //摇一摇机选数
     NSMutableArray      *_makeSureSelectNumArray;//确定选好的号码
+    
     UILabel             *_numberNots;           //共几注
     UILabel             *_totalMoney;           //共多少钱
+    UIView              *_toolbarView;          //底部清空和确定按钮
 }
 
 @end
@@ -56,8 +58,17 @@
     [super viewDidLoad];
     //读取中奖信息
     [self readKaiJiangData];
+    [self addtoolBar];
     _open_lotteryView = NO;
     self.navigationItem.title = self.name;
+    
+    //开启手机震动
+    [[UIApplication sharedApplication] setApplicationSupportsShakeToEdit:YES];
+    
+    //手机震动选号和清空数据会用到此数组
+    _shakeNumber = [[NSMutableArray alloc] initWithCapacity:0];
+    //用户确定
+    _makeSureSelectNumArray = [[NSMutableArray alloc] init];
 }
 
 
@@ -199,7 +210,6 @@
 }
 
 //选中或取消号码后产生的注数和钱数
-
 - (void)getTotalNotsAndMoney
 {
     NSInteger totalNumber = 1;
@@ -214,4 +224,170 @@
     _totalMoney.text = [NSString stringWithFormat:@"%ld元",totalNumber*2];
     NSLog(@"%ld",(long)totalNumber);
 }
+
+#pragma mark --
+#pragma mark -- 摇一摇机选
+- (BOOL) canBecomeFirstResponder
+{
+    return YES;
+}
+
+- (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+    
+    NSLog(@"检测到摇动");
+    [_shakeNumber removeAllObjects];
+    for (int i = 0; i<5; i++) {
+        int j = arc4random()%10;
+        NSString *selectNumStr = [NSString stringWithFormat:@"%d",j];
+        [_shakeNumber addObject:selectNumStr];
+        NSLog(@"selectNumStr:%@",selectNumStr);
+    }
+    NSLog(@"*_shakeNumber:%@",_shakeNumber);
+    
+    _refreshData = YES;
+    [_PLFiveTableView reloadData];
+}
+
+- (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+    NSLog(@"摇动取消");
+}
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+    NSLog(@"摇动结束");
+    if (event.subtype == UIEventSubtypeMotionShake) {
+        NSLog(@"UIEventSubtypeMotionShake---摇动结束");
+        
+        _numberNots.text = @"共1注";
+        _totalMoney.text = @"2元";
+        _refreshData = NO;
+    }
+}
+#pragma mark --
+#pragma mark -- UISrollViewDelegate
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    //取消所有点击小球的背景图
+    for (UIView *tmpView in [UIApplication sharedApplication].delegate.window.subviews) {
+        if (tmpView.tag == 123456) {
+            [tmpView removeFromSuperview];
+        }
+    }
+    
+    _refreshData = NO;
+}
+
+#pragma mark --
+#pragma mark -- 添加底部清空和确定
+- (void)addtoolBar
+{
+    _toolbarView = [[UIView alloc] initWithFrame:self.tabBarController.tabBar.frame];
+    _toolbarView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"ToolBarBackground.png"]];
+    //清空按钮
+    UIButton *_clearButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_clearButton setImage:[UIImage imageNamed:@"ToolBarRedButton.png"] forState:UIControlStateNormal];
+    [_clearButton setImage:[UIImage imageNamed:@"ToolBarRedButtonPressed.png"] forState:UIControlStateHighlighted];
+    _clearButton.frame = CGRectMake(9, 3.5, 58, 34);
+    [_clearButton addTarget:self action:@selector(pressedClearBut:) forControlEvents:UIControlEventTouchUpInside];
+    [_toolbarView addSubview:_clearButton];
+    UILabel *_clearButtonLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 58, 34)];
+    _clearButtonLabel.text = @"清空";
+    _clearButtonLabel.backgroundColor = [UIColor clearColor];
+    _clearButtonLabel.font = [UIFont boldSystemFontOfSize:18];
+    _clearButtonLabel.textColor = [UIColor whiteColor];
+    _clearButtonLabel.textAlignment = NSTextAlignmentCenter;
+    [_clearButton addSubview:_clearButtonLabel];
+
+    
+    //确定按钮
+    UIButton *_sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_sureButton setImage:[UIImage imageNamed:@"ToolBarRedButton.png"] forState:UIControlStateNormal];
+    [_sureButton setImage:[UIImage imageNamed:@"ToolBarRedButtonPressed.png"] forState:UIControlStateHighlighted];
+    _sureButton.frame = CGRectMake(305, 3.5, 58, 34);
+    [_sureButton addTarget:self action:@selector(pressedSureBut:) forControlEvents:UIControlEventTouchUpInside];
+    [_toolbarView addSubview:_sureButton];
+    UILabel *_sureButtonLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 58, 34)];
+    _sureButtonLabel.text = @"确定";
+    _sureButtonLabel.backgroundColor = [UIColor clearColor];
+    _sureButtonLabel.font = [UIFont boldSystemFontOfSize:18];
+    _sureButtonLabel.textColor = [UIColor whiteColor];
+    _sureButtonLabel.textAlignment = NSTextAlignmentCenter;
+    [_sureButton addSubview:_sureButtonLabel];
+
+    
+    _numberNots = [[UILabel alloc] initWithFrame:CGRectMake(103, 0, 80, 43)];
+    _numberNots.text = @"共0注";
+    _numberNots.backgroundColor = [UIColor clearColor];
+    _numberNots.font = [UIFont systemFontOfSize:16];
+    _numberNots.textColor = [UIColor whiteColor];
+    _numberNots.textAlignment = NSTextAlignmentRight;
+    [_toolbarView addSubview:_numberNots];
+
+    
+    _totalMoney = [[UILabel alloc] initWithFrame:CGRectMake(218, 0, 80, 43)];
+    _totalMoney.text = @"0元";
+    _totalMoney.backgroundColor = [UIColor clearColor];
+    _totalMoney.font = [UIFont systemFontOfSize:16];
+    _totalMoney.textColor = [UIColor colorWithRed:215.0/255.0 green:180.0/255.0 blue:87.0/255.0 alpha:1];
+    _totalMoney.textAlignment = NSTextAlignmentLeft;
+    [_toolbarView addSubview:_totalMoney];
+
+    
+    [self.view addSubview:_toolbarView];
+
+}
+
+
+- (void)pressedSureBut: (UIButton *)sender
+{
+    NSLog(@"确定");
+    _refreshData = NO;
+    [_PLFiveTableView reloadData];
+    for (NSInteger i = 0 ; i<5 ; i++ ) {
+        NSMutableArray *tmpArr = [_makeSureSelectNumArray objectAtIndex:i];
+        NSLog(@"%ld位：%@",(long)i,tmpArr);
+        if ([tmpArr count] == 0) {
+            NSString *_weiZhiStr ;
+            switch (i) {
+                case 0:
+                    _weiZhiStr = [NSString stringWithFormat:@"请输入万位"];
+                    break;
+                case 1:
+                    _weiZhiStr = [NSString stringWithFormat:@"请输入千位"];
+                    break;
+                case 2:
+                    _weiZhiStr = [NSString stringWithFormat:@"请输入百位"];
+                    break;
+                case 3:
+                    _weiZhiStr = [NSString stringWithFormat:@"请输入十位"];
+                    break;
+                case 4:
+                    _weiZhiStr = [NSString stringWithFormat:@"请输入个位"];
+                    break;
+                default:
+                    break;
+            }
+            UIAlertView *alertV = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:_weiZhiStr delegate:nil cancelButtonTitle:@"取消" otherButtonTitles: nil];
+            [alertV show];
+            return;
+        }
+        
+    }
+}
+
+
+- (void)pressedClearBut: (UIButton *)sender
+{
+    NSLog(@"清空");
+    _refreshData = YES;
+    [_shakeNumber removeAllObjects];
+    [_PLFiveTableView reloadData];
+    _numberNots.text = @"共0注";
+    _totalMoney.text = @"0元";
+    
+}
+
 @end

@@ -54,8 +54,8 @@
         zhiXuanLabel.font = [UIFont systemFontOfSize:11];
         [self.contentView addSubview:zhiXuanLabel];
         //添加十个小球和小球上的数字
-        for (NSInteger i = 0; i<2; i++) {
-            for (NSInteger j = 0; j<5; j++) {
+        for (int i = 0; i<2; i++) {
+            for (int j = 0; j<5; j++) {
                 UIImageView *redBallImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BetGrayBall.png"]];
                 redBallImage.tag = j+i*5+103;
                 redBallImage.frame = CGRectMake(55+(35+11)*j, 9+(39+2)*i, 35, 39);
@@ -63,8 +63,8 @@
                 [self.contentView addSubview:redBallImage];
                 
                 UILabel *labelNumber = [[UILabel alloc] initWithFrame:redBallImage.bounds];
-                labelNumber.tag = (j+i*5)+120;
-                labelNumber.text = [NSString stringWithFormat:@"%ld",j+i*5];
+                labelNumber.tag = (j+i*5)+123;
+                labelNumber.text = [NSString stringWithFormat:@"%d",j+i*5];
                 labelNumber.textColor = [UIColor colorWithRed:160.0/255.0 green:14.0/255.0 blue:54.0/255.0 alpha:1];
                 labelNumber.textAlignment = NSTextAlignmentCenter;
                 labelNumber.font = [UIFont systemFontOfSize:20];
@@ -141,7 +141,7 @@
     //删除所有的redballHighlight
     [self removeBallHighlight];
     
-    for (NSInteger i = 100 ; i<110; i++) {
+    for (NSInteger i = 103 ; i<113; i++) {
         UIImageView *tmpImage = (UIImageView *)[self.contentView viewWithTag:i];
         CGRect tmpRect = tmpImage.frame;
         
@@ -158,7 +158,7 @@
             locations.y = tmpRect.origin.y;
             
             //所选号码
-            NSInteger testNumber = i - 100;
+            NSInteger testNumber = i - 103;
             
             //所选小号的绝对坐标点
             CGPoint absoluteCoordinate = [self getSelectNumberPoint:locationWin withCellPoint:locationCel andYofBallorigin:locations];
@@ -181,7 +181,7 @@
     //删除所有的redballHighlight
     [self removeBallHighlight];
     
-    for (NSInteger i = 100 ; i<110; i++) {
+    for (NSInteger i = 103 ; i<113; i++) {
         UIImageView *tmpImage = (UIImageView *)[self.contentView viewWithTag:i];
         CGRect tmpRect = tmpImage.frame;
         if (CGRectContainsPoint(tmpRect, locationCel)) {
@@ -192,7 +192,7 @@
             locations.y = tmpRect.origin.y;
             
             //所选号码
-            NSInteger testNumber = i - 100;
+            NSInteger testNumber = i - 103;
             
             //所选小号的绝对坐标点
             CGPoint absoluteCoordinate = [self getSelectNumberPoint:locationWin withCellPoint:locationCel andYofBallorigin:locations];
@@ -258,7 +258,7 @@
       NSLog(@"slecteStr:%@",slecteStr);
     //清空所有选择数据
     [_selectNumberArray removeAllObjects];
-    for (int i = 100; i<110; i++) {
+    for (int i = 103; i<113; i++) {
             UIImageView *tmpImage = (UIImageView *)[self.contentView viewWithTag:i];
             tmpImage.image = [UIImage imageNamed:@"BetGrayBall.png"];
             UILabel *tmpLabel = (UILabel *)[tmpImage viewWithTag:i +10];
@@ -270,8 +270,8 @@
     }else
     {
         //摇动后随即选出的一个数字
-        for (int i = 100; i<110; i++) {
-            NSString * tmpNumStr = [NSString stringWithFormat:@"%d",i-100];
+        for (int i = 103; i<113; i++) {
+            NSString * tmpNumStr = [NSString stringWithFormat:@"%d",i-103];
             if ([slecteStr isEqualToString:tmpNumStr]) {
                 UIImageView *tmpImage = (UIImageView *)[self.contentView viewWithTag:i];
                 tmpImage.image = [UIImage imageNamed:@"BetRedBall.png"];

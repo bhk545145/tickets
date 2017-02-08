@@ -28,6 +28,8 @@
     [_devicearray addObjectsFromArray:array];
 }
 
+
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -77,7 +79,6 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
 
 }
 
@@ -86,6 +87,7 @@
         UIViewController *target = segue.destinationViewController;
         if ([target isKindOfClass:[PLFiveViewController class]]) {
             PLFiveViewController* deviceVC = (PLFiveViewController *)target;
+            deviceVC.hidesBottomBarWhenPushed = YES;
             NSIndexPath *path = [self.tableView indexPathForSelectedRow];
             NSString *name = _devicearray[path.row][@"name"];
             NSString *code = _devicearray[path.row][@"code"];
