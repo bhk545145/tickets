@@ -415,7 +415,7 @@
 				INFOPLIST_FILE = tickets/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = cn.com.broadlink.blappsdkdemo.baihk;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.com.broadlink.tickets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -429,7 +429,7 @@
 				INFOPLIST_FILE = tickets/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = cn.com.broadlink.blappsdkdemo.baihk;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.com.broadlink.tickets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
