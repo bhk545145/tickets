@@ -42,6 +42,7 @@
         [weakSelf refreshDeviceList];
     }];
     [self.tableView.mj_header beginRefreshing];
+    
 }
 
 - (void)refreshDeviceList
@@ -64,8 +65,8 @@
             info.rows = ticinfo.rows;
             info.dataarray = ticinfo.dataarray;
             [array addObject:info];
+            [self.tableView reloadData];
         }];
-        
     }
     [_devicearray removeAllObjects];
     [_devicearray addObjectsFromArray:array];
@@ -100,7 +101,11 @@
     UIImageView *ticketsimgeview = (UIImageView *)[cell viewWithTag:105];
     NSString *ticketsimageString = [NSString stringWithFormat:@"%@",info.png];
     ticketsimgeview.image = [UIImage imageNamed:ticketsimageString];
-    datainfo *Datainfo = info.dataarray[0];
+    datainfo *Datainfo;
+    if (info.dataarray.count) {
+        Datainfo = info.dataarray[0];
+    }
+    
     UILabel *opencodeLabel = (UILabel *)[cell viewWithTag:102];
     opencodeLabel.text = [NSString stringWithFormat:@"%@",Datainfo.opencode];
     UILabel *expectLabel = (UILabel *)[cell viewWithTag:103];

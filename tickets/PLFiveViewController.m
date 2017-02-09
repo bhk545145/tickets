@@ -13,6 +13,7 @@
 #import "datainfo.h"
 #import "numberCell.h"
 #import <AudioToolbox/AudioToolbox.h>
+#import <MJRefresh/MJRefresh.h>
 
 @interface PLFiveViewController ()<numberCellDelegate>{
     NSMutableArray      *_kaijiangArray;        //前5期开奖信息保存在此数组中
@@ -34,6 +35,7 @@
 #pragma mark --  读取开奖数据
 - (void)readKaiJiangData
 {
+    NSMutableArray *array = [[NSMutableArray alloc] initWithArray:_kaijiangArray];
     NSString *string = [NSString stringWithFormat:@"/%@.json",self.code];
     NSString *URLString = [baseUrl stringByAppendingString:string];
     kaijiangGet *kaijiangget = [[kaijiangGet alloc]init];
@@ -41,22 +43,20 @@
         ticketsinfo *ticinfo = [[ticketsinfo alloc]init];
         ticinfo = [ticinfo initWithDict:dic];
         _rows = ticinfo.rows;
-        _kaijiangArray = [[NSMutableArray alloc] initWithCapacity:0];
+        [array addObjectsFromArray:ticinfo.dataarray];
+        [_kaijiangArray removeAllObjects];
+        [_kaijiangArray addObjectsFromArray:array];
         
-        for (int i = 0;i <ticinfo.rows;i++) {
-            datainfo *Datainfo = [[datainfo alloc]init];
-            Datainfo = [Datainfo initWithdata:ticinfo.dataarray rows:i];
-            [_kaijiangArray addObject:Datainfo];
-        }
-        [self.ticketsTableview reloadData];
     }];
-    
+    [_PLFiveTableView.mj_header endRefreshing];
+    [self.ticketsTableview reloadData];
 }
 
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _kaijiangArray = [[NSMutableArray alloc] initWithCapacity:0];
     //读取中奖信息
     [self readKaiJiangData];
     [self addtoolBar];
@@ -70,6 +70,13 @@
     _shakeNumber = [[NSMutableArray alloc] initWithCapacity:0];
     //用户确定
     _makeSureSelectNumArray = [[NSMutableArray alloc] init];
+    
+    //刷新
+    MJWeakSelf
+    _PLFiveTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [weakSelf readKaiJiangData];
+    }];
+    [_PLFiveTableView.mj_header beginRefreshing];
 }
 
 
