@@ -7,10 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "datainfo.h"
 
 @interface ticketsinfo : NSObject
 
-@property (nonatomic, strong) NSArray *data;
+@property (nonatomic, assign) NSString *name;
+@property (nonatomic, assign) NSString *code;
+@property (nonatomic, assign) NSString *png;
+@property (nonatomic, strong) datainfo *datainfo;
+@property (nonatomic, strong) NSMutableArray *dataarray;
 @property (nonatomic, assign) int rows;
 
 

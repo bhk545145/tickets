@@ -18,4 +18,8 @@
     }
     return self;
 }
+
++ (id)DeviceinfoWithDict:(NSArray *)data rows:(int)rows{
+    return [[self alloc] initWithdata:data rows:rows];
+}
 @end

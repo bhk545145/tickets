@@ -14,4 +14,5 @@
 @property (nonatomic, strong) NSString *opencode;
 @property (nonatomic, strong) NSString *opentime;
 - (id)initWithdata:(NSArray *)data rows:(int)rows;
++ (id)DeviceinfoWithDict:(NSArray *)data rows:(int)rows;
 @end

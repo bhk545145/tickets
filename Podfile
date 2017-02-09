@@ -10,4 +10,5 @@ target 'tickets' do
 	pod 'MJRefresh'
 	pod 'MBProgressHUD'
 	pod 'FMDB'
+    pod 'MJRefresh'
 end

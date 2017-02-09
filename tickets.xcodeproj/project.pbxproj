@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02A15BD71E4C429C00A579EF /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A15BD61E4C429C00A579EF /* AudioToolbox.framework */; };
 		02CDF8AE1E44241300216C3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CDF8AD1E44241300216C3E /* main.m */; };
 		02CDF8B11E44241300216C3E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CDF8B01E44241300216C3E /* AppDelegate.m */; };
 		02CDF8BA1E44241300216C3E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 02CDF8B81E44241300216C3E /* Main.storyboard */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		02A15BD61E4C429C00A579EF /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		02AA7A831E45C2AB006E3C31 /* bhkCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bhkCommon.h; sourceTree = "<group>"; };
 		02CDF8A91E44241300216C3E /* tickets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tickets.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02CDF8AD1E44241300216C3E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -53,6 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02A15BD71E4C429C00A579EF /* AudioToolbox.framework in Frameworks */,
 				BB93F951777EE9AFF2976DE0 /* Pods_tickets.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -148,6 +151,7 @@
 		61DC142D6CF592B875E3F5D8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				02A15BD61E4C429C00A579EF /* AudioToolbox.framework */,
 				CAE1AB8C5CC5BB8F91EA2249 /* Pods_tickets.framework */,
 			);
 			name = Frameworks;

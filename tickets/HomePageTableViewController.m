@@ -14,9 +14,11 @@
 #import "PLFiveViewController.h"
 #import "kaijiangGet.h"
 #import "datainfo.h"
+#import <MJRefresh/MJRefresh.h>
 
 @interface HomePageTableViewController ()
 @property (nonatomic,strong)NSMutableArray *devicearray;
+@property (nonatomic,strong)NSMutableArray *ticketsDataarray;
 @end
 
 @implementation HomePageTableViewController
@@ -24,11 +26,51 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     _devicearray = [[NSMutableArray alloc]init];
+    _ticketsDataarray = [[NSMutableArray alloc]init];
+    //数组转模型
     NSArray *array = ticketsarray;
-    [_devicearray addObjectsFromArray:array];
+    for (int i = 0; i < array.count; i++) {
+        ticketsinfo *info = [[ticketsinfo alloc]init];
+        info.name = array[i][@"name"];
+        info.png = array[i][@"png"];
+        info.code = array[i][@"code"];
+        [_devicearray addObject:info];
+    }
+    //刷新
+    MJWeakSelf
+    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [weakSelf refreshDeviceList];
+    }];
+    [self.tableView.mj_header beginRefreshing];
 }
 
+- (void)refreshDeviceList
+{
+    [self reloadTicketsData];
+    [self.tableView reloadData];
+    [self.tableView.mj_header endRefreshing];
+}
 
+- (void)reloadTicketsData{
+    NSMutableArray *array = [[NSMutableArray alloc] initWithArray:_devicearray];
+    for (int i = 0; i < _devicearray.count; i++) {
+        ticketsinfo *info = _devicearray[i];
+        NSString *string = [NSString stringWithFormat:@"/%@-1.json",info.code];
+        NSString *URLString = [baseUrl stringByAppendingString:string];
+        kaijiangGet *kaijiangget = [[kaijiangGet alloc]init];
+        [kaijiangget apiplus:URLString  completionHandler:^(NSDictionary *dic) {
+            ticketsinfo *ticinfo = [[ticketsinfo alloc]init];
+            ticinfo = [ticinfo initWithDict:dic];
+            info.rows = ticinfo.rows;
+            info.dataarray = ticinfo.dataarray;
+            [array addObject:info];
+        }];
+        
+    }
+    [_devicearray removeAllObjects];
+    [_devicearray addObjectsFromArray:array];
+
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -47,33 +89,24 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    ticketsinfo *info = _devicearray[indexPath.row];
     NSString *CellIdentifier = @"Devicecell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     UILabel *titleLabel = (UILabel *)[cell viewWithTag:101];
-    titleLabel.text = _devicearray[indexPath.row][@"name"];
+    titleLabel.text = info.name;
     UIImageView *ticketsimgeview = (UIImageView *)[cell viewWithTag:105];
-    NSString *ticketsimageString = [NSString stringWithFormat:@"%@",_devicearray[indexPath.row][@"png"]];
+    NSString *ticketsimageString = [NSString stringWithFormat:@"%@",info.png];
     ticketsimgeview.image = [UIImage imageNamed:ticketsimageString];
-    NSString *string = [NSString stringWithFormat:@"/%@-1.json",_devicearray[indexPath.row][@"code"]];
-    NSString *URLString = [baseUrl stringByAppendingString:string];
-    kaijiangGet *kaijiangget = [[kaijiangGet alloc]init];
-    [kaijiangget apiplus:URLString completionHandler:^(NSDictionary *dic) {
-        ticketsinfo *info = [[ticketsinfo alloc]init];
-        info = [info initWithDict:dic];
-        datainfo *Datainfo = [[datainfo alloc]init];
-        for (int i = 0;i < info.rows;i++) {
-            Datainfo = [Datainfo initWithdata:info.data rows:i];
-        }
-        UILabel *opencodeLabel = (UILabel *)[cell viewWithTag:102];
-        opencodeLabel.text = [NSString stringWithFormat:@"%@",Datainfo.opencode];
-        UILabel *expectLabel = (UILabel *)[cell viewWithTag:103];
-        expectLabel.text = [NSString stringWithFormat:@"第%@期",Datainfo.expect];
-        UILabel *opentimeLabel = (UILabel *)[cell viewWithTag:104];
-        opentimeLabel.text =[NSString stringWithFormat:@"开奖时间 %@",Datainfo.opentime];
-    }];
+    datainfo *Datainfo = info.dataarray[0];
+    UILabel *opencodeLabel = (UILabel *)[cell viewWithTag:102];
+    opencodeLabel.text = [NSString stringWithFormat:@"%@",Datainfo.opencode];
+    UILabel *expectLabel = (UILabel *)[cell viewWithTag:103];
+    expectLabel.text = [NSString stringWithFormat:@"第%@期",Datainfo.expect];
+    UILabel *opentimeLabel = (UILabel *)[cell viewWithTag:104];
+    opentimeLabel.text =[NSString stringWithFormat:@"开奖时间 %@",Datainfo.opentime];
     
     return cell;
 }
@@ -89,10 +122,9 @@
             PLFiveViewController* deviceVC = (PLFiveViewController *)target;
             deviceVC.hidesBottomBarWhenPushed = YES;
             NSIndexPath *path = [self.tableView indexPathForSelectedRow];
-            NSString *name = _devicearray[path.row][@"name"];
-            NSString *code = _devicearray[path.row][@"code"];
-            deviceVC.name = name;
-            deviceVC.code = code;
+            ticketsinfo *info = _devicearray[path.row];
+            deviceVC.name = info.name;
+            deviceVC.code = info.code;
         }
     }
 }

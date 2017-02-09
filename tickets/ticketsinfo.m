@@ -12,9 +12,13 @@
 
 - (id)initWithDict:(NSDictionary *)dict{
     if (self = [super init]) {
-        _data = dict[@"data"];
         _rows = [dict[@"rows"] intValue];
-
+        for (int i = 0; i < _rows; i++) {
+            _datainfo = [datainfo DeviceinfoWithDict:dict[@"data"] rows:i];
+            _dataarray = [[NSMutableArray alloc]initWithCapacity:0];
+            [_dataarray addObject:_datainfo];
+        }
+        
     }
     return self;
 }

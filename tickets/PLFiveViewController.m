@@ -12,6 +12,7 @@
 #import "ticketsinfo.h"
 #import "datainfo.h"
 #import "numberCell.h"
+#import <AudioToolbox/AudioToolbox.h>
 
 @interface PLFiveViewController ()<numberCellDelegate>{
     NSMutableArray      *_kaijiangArray;        //前5期开奖信息保存在此数组中
@@ -36,15 +37,15 @@
     NSString *string = [NSString stringWithFormat:@"/%@.json",self.code];
     NSString *URLString = [baseUrl stringByAppendingString:string];
     kaijiangGet *kaijiangget = [[kaijiangGet alloc]init];
-    [kaijiangget apiplus:URLString completionHandler:^(NSDictionary *dic) {
-        ticketsinfo *info = [[ticketsinfo alloc]init];
-        info = [info initWithDict:dic];
-        _rows = info.rows;
+    [kaijiangget apiplus:URLString  completionHandler:^(NSDictionary *dic) {
+        ticketsinfo *ticinfo = [[ticketsinfo alloc]init];
+        ticinfo = [ticinfo initWithDict:dic];
+        _rows = ticinfo.rows;
         _kaijiangArray = [[NSMutableArray alloc] initWithCapacity:0];
         
-        for (int i = 0;i < info.rows;i++) {
+        for (int i = 0;i <ticinfo.rows;i++) {
             datainfo *Datainfo = [[datainfo alloc]init];
-            Datainfo = [Datainfo initWithdata:info.data rows:i];
+            Datainfo = [Datainfo initWithdata:ticinfo.dataarray rows:i];
             [_kaijiangArray addObject:Datainfo];
         }
         [self.ticketsTableview reloadData];
@@ -88,6 +89,7 @@
         [UIView setAnimationDuration:0.3];
         _openLotteryView.frame = CGRectMake(0, -35, 375, 120);
         _PLFiveTableView.frame = CGRectMake(0, 80, 375, 529);
+        [UIView commitAnimations];
         _open_lotteryView = NO;
     }
 }
@@ -165,7 +167,6 @@
                 cell.delegate = self;
                 return cell;
             }
-            
         }
             break;
         case (3):
@@ -236,6 +237,8 @@
 {
     
     NSLog(@"检测到摇动");
+#pragma mark -- 手机震动
+    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
     [_shakeNumber removeAllObjects];
     for (int i = 0; i<5; i++) {
         int j = arc4random()%10;
@@ -259,7 +262,6 @@
     NSLog(@"摇动结束");
     if (event.subtype == UIEventSubtypeMotionShake) {
         NSLog(@"UIEventSubtypeMotionShake---摇动结束");
-        
         _numberNots.text = @"共1注";
         _totalMoney.text = @"2元";
         _refreshData = NO;
@@ -370,8 +372,10 @@
                 default:
                     break;
             }
-            UIAlertView *alertV = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:_weiZhiStr delegate:nil cancelButtonTitle:@"取消" otherButtonTitles: nil];
-            [alertV show];
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:_weiZhiStr preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消"style:UIAlertActionStyleCancel handler:nil];
+            [alertController addAction:cancelAction];
+            [self presentViewController:alertController animated:YES completion:nil];
             return;
         }
         

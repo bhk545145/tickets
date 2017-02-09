@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "ticketsinfo.h"
 @interface kaijiangGet : NSObject
-- (void)apiplus:(NSString *)URLString completionHandler:(void (^)(NSDictionary *dic))completionHandler;
+- (void)apiplus:(NSString *)URLString  completionHandler:(void (^)(NSDictionary *dic))completionHandler;
 @end
